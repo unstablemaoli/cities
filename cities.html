@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Сторінка портфоліо Тамари Король з інтеграцією зовнішнього GeoDB Cities API.">
+  <title>Cities API | Tamara Korol</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+  <script src="api.js" defer></script>
+</head>
+<body data-page="cities">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <header class="site-header inner-header">
+    <nav class="navbar" aria-label="Головна навігація">
+      <a class="logo" href="index.html">Tamara Korol</a>
+      <ul class="nav-list">
+        <li><a href="index.html">Main page</a></li>
+        <li><a href="contacts.html">Contacts</a></li>
+        <li><a href="cities.html" aria-current="page">Cities API</a></li>
+        <li>
+          <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false">
+            Dark theme
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <section class="hero compact-hero">
+      <div class="hero-text">
+        <p class="eyebrow">Laboratory work №5</p>
+        <h1>GeoDB Cities API</h1>
+        <p class="hero-description">
+          This page uses JavaScript fetch() to send a GET request to an external public API and display city data.
+        </p>
+        <p class="js-note" id="visitStatus">JavaScript status will appear here.</p>
+      </div>
+      <img class="hero-photo" src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=900&q=80" alt="City map and navigation pins" width="520" height="360">
+    </section>
+  </header>
+
+  <main id="main-content">
+    <section class="section reveal-target" aria-labelledby="api-title">
+      <div class="section-heading">
+        <p class="section-label">External API</p>
+        <h2 id="api-title">City search</h2>
+      </div>
+
+      <div class="cards-grid two-columns api-layout">
+        <form class="card api-form" id="citySearchForm" action="#" autocomplete="off">
+          <p class="api-intro">
+            API endpoint: <code>GET /v1/geo/cities</code>. Enter your RapidAPI key, choose filters and load cities.
+          </p>
+
+          <label>
+            RapidAPI key
+            <input id="apiKey" name="apiKey" type="password" placeholder="Paste your X-RapidAPI-Key" required>
+            <span class="field-help">The key is used only in the browser request and is not written into the HTML file.</span>
+          </label>
+
+          <label>
+            Country code
+            <select id="countryIds" name="countryIds">
+              <option value="UA" selected>Ukraine — UA</option>
+              <option value="PL">Poland — PL</option>
+              <option value="DE">Germany — DE</option>
+              <option value="FR">France — FR</option>
+              <option value="GB">United Kingdom — GB</option>
+              <option value="US">United States — US</option>
+              <option value="CA">Canada — CA</option>
+              <option value="JP">Japan — JP</option>
+              <option value="">All countries</option>
+            </select>
+          </label>
+
+          <label>
+            City name prefix
+            <input id="namePrefix" name="namePrefix" type="text" placeholder="Kyiv, Lviv, Kharkiv..." value="Ky">
+          </label>
+
+          <label>
+            Minimum population
+            <input id="minPopulation" name="minPopulation" type="number" min="0" step="1000" value="100000">
+          </label>
+
+          <label>
+            Result limit
+            <select id="limit" name="limit">
+              <option value="3">3 cities</option>
+              <option value="5" selected>5 cities</option>
+              <option value="10">10 cities</option>
+            </select>
+          </label>
+
+          <div class="api-actions">
+            <button class="button" type="submit">Load cities</button>
+            <button class="button button-secondary" id="demoDataButton" type="button">Show demo data</button>
+            <button class="button button-secondary" id="clearApiButton" type="button">Clear</button>
+          </div>
+        </form>
+
+        <article class="card api-info-card">
+          <p class="section-label">How it works</p>
+          <h3>What JavaScript does</h3>
+          <ol class="api-info-list">
+            <li>Reads form values: country, prefix, population and limit.</li>
+            <li>Creates URL parameters with <code>URLSearchParams</code>.</li>
+            <li>Sends <code>fetch()</code> request to GeoDB Cities API.</li>
+            <li>Converts response with <code>response.json()</code>.</li>
+            <li>Renders the received cities on the page.</li>
+          </ol>
+          <p class="small-note">
+            For real API loading you need an active RapidAPI key. The demo button is added only to show the same rendering format without a key.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal-target" aria-labelledby="results-title">
+      <div class="section-heading project-heading">
+        <div>
+          <p class="section-label">Response data</p>
+          <h2 id="results-title">Results</h2>
+        </div>
+        <p class="result-counter" id="cityCounter" aria-live="polite">0 cities</p>
+      </div>
+
+      <div class="card api-status-card" id="apiStatus" role="status" aria-live="polite">
+        Enter your RapidAPI key and click “Load cities”, or use demo data to preview the interface.
+      </div>
+
+      <div class="cards-grid two-columns city-grid" id="cityResults" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Tamara Korol. All rights protected.</p>
+    <ul class="footer-links">
+      <li><a href="index.html">Main page</a></li>
+      <li><a href="contacts.html">Contacts</a></li>
+      <li><a href="cities.html" aria-current="page">Cities API</a></li>
+    </ul>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">↑</button>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
